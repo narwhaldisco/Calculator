@@ -48,6 +48,7 @@
             this.buttonClear = new System.Windows.Forms.Button();
             this.buttonEquals = new System.Windows.Forms.Button();
             this.modeLabel = new System.Windows.Forms.Label();
+            this.enterBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn1
@@ -270,11 +271,24 @@
             this.modeLabel.TabIndex = 27;
             this.modeLabel.Text = "INFIX";
             // 
+            // enterBtn
+            // 
+            this.enterBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.enterBtn.Location = new System.Drawing.Point(12, 267);
+            this.enterBtn.Name = "enterBtn";
+            this.enterBtn.Size = new System.Drawing.Size(237, 84);
+            this.enterBtn.TabIndex = 28;
+            this.enterBtn.Text = "ENTER";
+            this.enterBtn.UseVisualStyleBackColor = true;
+            this.enterBtn.Visible = false;
+            this.enterBtn.Click += new System.EventHandler(this.enterBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(360, 366);
+            this.Controls.Add(this.enterBtn);
             this.Controls.Add(this.modeLabel);
             this.Controls.Add(this.buttonEquals);
             this.Controls.Add(this.buttonClear);
@@ -328,6 +342,7 @@
         private System.Windows.Forms.Button buttonClear;
         private System.Windows.Forms.Button buttonEquals;
         private System.Windows.Forms.Label modeLabel;
+        private System.Windows.Forms.Button enterBtn;
     }
 }
 

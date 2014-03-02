@@ -10,12 +10,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.Drawing.Text;
+using Calculator.Controllers;
 
 namespace Calculator
 {
     public partial class Form1 : Form
     {
+
+
+        //Members-----------------------------------------------------------------------------------------------------------------------------
+        
 
         [DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts); //Ignore this.
@@ -23,143 +27,78 @@ namespace Calculator
         FontFamily ff;
         Font font;
 
-        String value1 = "0";
-        String value2 = "0";
+        Mode currentMode;
 
-        bool valFlag = true;
-        bool opFlag = true;
-
-        String currentValue;
-
-        Operator currentOperator;
+        //Functions-----------------------------------------------------------------------------------------------------------------------------
 
         public Form1()
         {
             InitializeComponent();
 
-            currentValue = "0";
-
+            currentMode = new INFIX();
         }
 
         private void inputDigit(object sender, EventArgs e)
         {
-            if (currentValue == "0")
-                currentValue = "";
-
-            currentValue += sender.ToString()[sender.ToString().Length - 1].ToString();
-            this.calcWindow.Text = currentValue;
-
-            if (valFlag)
-                value1 = currentValue;
-            else
-                value2 = currentValue;
+            this.calcWindow.Text = currentMode.inputDigit(sender.ToString()[sender.ToString().Length - 1].ToString());
         }
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
-            currentValue = "0";
-            value1 = "";
-            value2 = "";
-            this.calcWindow.Text = currentValue;
-            opFlag = true;
+            this.calcWindow.Text = currentMode.clear();
         }
 
         private void buttonPlus_Click(object sender, EventArgs e)
         {
-
-            if (!opFlag)
-            {
-                buttonEquals_Click(sender, e);
-            }
-
-            opFlag = false;
-
-            currentOperator = new Add();
-            valFlag = !valFlag;
-            currentValue = "0";
+            this.calcWindow.Text = currentMode.inputOperator(new Add());
         }
 
         private void buttonEquals_Click(object sender, EventArgs e)
         {
-            try
-            {
-                value1 = currentOperator.perform(Convert.ToDouble(value1), Convert.ToDouble(value2)).ToString();
-            }
-            catch (FormatException)
-            {
-                this.calcWindow.Text = "ERROR";
-                value1 = "0";
-                value2 = "0";
-                return;
-            }
-            valFlag = !valFlag;
-            this.calcWindow.Text = value1;
+            this.calcWindow.Text = currentMode.performOperation();
         }
 
         private void buttonMinus_Click(object sender, EventArgs e)
         {
-            if (!opFlag)
-            {
-                buttonEquals_Click(sender, e);
-            }
-
-            opFlag = false;
-
-            currentOperator = new Subtract();
-            valFlag = !valFlag;
-            currentValue = "0";
+            this.calcWindow.Text = currentMode.inputOperator(new Subtract());
         }
 
         private void buttonMult_Click(object sender, EventArgs e)
         {
-            if (!opFlag)
-            {
-                buttonEquals_Click(sender, e);
-            }
-
-            opFlag = false;
-
-            currentOperator = new Multiply();
-            valFlag = !valFlag;
-            currentValue = "0";
+           this.calcWindow.Text = currentMode.inputOperator(new Multiply());
         }
 
         private void buttonDiv_Click(object sender, EventArgs e)
         {
-
-            if (!opFlag)
-            {
-                buttonEquals_Click(sender, e);
-            }
-
-            opFlag = false;
-
-
-            currentOperator = new Divide();
-            valFlag = !valFlag;
-            currentValue = "0";
+           this.calcWindow.Text = currentMode.inputOperator(new Divide());
         }
 
         private void buttonDec_Click(object sender, EventArgs e)
         {
-            if (currentValue == "0")
-                currentValue = "";
+            this.calcWindow.Text = currentMode.inputDigit(".");
 
-            currentValue += ".";
-            this.calcWindow.Text = currentValue;
-
-            if (valFlag)
-                value1 = currentValue;
-            else
-                value2 = currentValue;
         }
 
         private void buttonMode_Click(object sender, EventArgs e)
         {
-            //TODO: RPN mode
+            this.calcWindow.Text = currentMode.clear();
+
+            if (currentMode.GetType() == typeof(RPN))
+            {
+                currentMode = new INFIX();
+                this.enterBtn.Visible = false;
+            }
+            else
+            {
+                currentMode = new RPN();
+                this.enterBtn.Visible = true;
+            }
+
+            this.modeLabel.Text = currentMode.getName();
+
         }
 
-        private void PrivateFontCollection()
+        private void PrivateFontCollection() //SUPER IMPORTANT FONTS
         {
             // Create the byte array and get its length
 
@@ -192,7 +131,9 @@ namespace Calculator
             this.calcWindow.Font = new Font(ff, 28, FontStyle.Regular);
         }
 
-        
-
+        private void enterBtn_Click(object sender, EventArgs e)
+        {
+            this.calcWindow.Text = currentMode.pushValue();
+        }
     }
 }

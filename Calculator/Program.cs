@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calculator.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,5 +19,21 @@ namespace Calculator
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
         }
+
+
+        //Define main model
+        private static MainModel mainModel;
+
+        public static MainModel MainModel
+        {
+            get
+            {
+                if (mainModel == null) mainModel = new MainModel();
+                return mainModel;
+            }
+            set { mainModel = value; }
+        }
+
+
     }
 }
