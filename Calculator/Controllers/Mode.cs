@@ -9,7 +9,7 @@ namespace Calculator.Controllers
     abstract class Mode
     {
         //States
-        public enum States { ACCEPTING_DIGITS, ACCEPTING_OPERATOR };
+        public enum States { HAVE_NOTHING, HAVE_OPERAND, HAVE_OPERATOR };
 
         //Current state
         public States state;
@@ -28,11 +28,11 @@ namespace Calculator.Controllers
         //Four Functions
         abstract public string inputOperator(Operator op);
 
-        abstract public string performOperation();
+        abstract public string performOperation(bool flop);
 
         public string clear()
         {
-            this.state = States.ACCEPTING_DIGITS;
+            this.state = States.HAVE_NOTHING;
 
             return Program.MainModel.clear();
         }

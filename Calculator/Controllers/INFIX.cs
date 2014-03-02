@@ -11,7 +11,7 @@ namespace Calculator.Controllers
         public INFIX()
         {
             //Set initial state
-            this.state = States.ACCEPTING_DIGITS;
+            this.state = States.HAVE_NOTHING;
 
             this.name = "INFIX";
 
@@ -22,11 +22,12 @@ namespace Calculator.Controllers
         {
             switch (state)
             {
-                case States.ACCEPTING_DIGITS:
-                    this.state = States.ACCEPTING_OPERATOR;
+                case States.HAVE_NOTHING:
+                    this.state = States.HAVE_OPERAND;
                     return Program.MainModel.setCurrentValue(value);
 
-                case States.ACCEPTING_OPERATOR:
+                case States.HAVE_OPERATOR: case States.HAVE_OPERAND:
+                    this.state = States.HAVE_OPERAND;
                     return Program.MainModel.setCurrentValue(value);
 
                 default:
@@ -38,11 +39,11 @@ namespace Calculator.Controllers
         {
             switch (state)
             {
-                case States.ACCEPTING_DIGITS:
+                case States.HAVE_NOTHING:
                     return "ERROR";
 
-                case States.ACCEPTING_OPERATOR:
-                    this.state = States.ACCEPTING_DIGITS;
+                case States.HAVE_OPERAND:
+                    this.state = States.HAVE_OPERATOR;
                     return Program.MainModel.setCurrentOp(op);
 
                 default:
@@ -50,9 +51,10 @@ namespace Calculator.Controllers
             }
         }
 
-        public override string performOperation()
+        public override string performOperation(bool flop)
         {
-            return Program.MainModel.performOp();
+            this.state = States.HAVE_OPERAND;
+            return Program.MainModel.performOp(flop);
         }
 
     }

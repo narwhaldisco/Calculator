@@ -40,21 +40,47 @@ namespace Calculator.Models
             if (valFlag)
             {
                 //Check if 0 for asthetic reasons, ie no leading zeros
-                if (stringValue1 == "0")
+                if (stringValue1 == "0" || stringValue1 == "" && currentValue ==".")
+                {
                     stringValue1 = "";
 
+                    if (currentValue == ".")
+                        stringValue1 = "0";
+                }
+                
+
                 stringValue1 += currentValue;
-                value1 = Convert.ToDouble(stringValue1);
+
+                try
+                {
+                    value1 = Convert.ToDouble(stringValue1);
+                }
+                catch (FormatException)
+                {
+                    return "ERROR";
+                }
+ 
+      
                 return stringValue1;
             }
             else
             {
                 //Check if 0 for asthetic reasons, ie no leading zeros
-                if (stringValue2 == "0")
+                if (stringValue2 == "0" || stringValue2 == "" && currentValue == ".")
+                {
                     stringValue2 = "";
+                    if (currentValue == ".")
+                        stringValue2 = "0";
+                }
 
                 stringValue2 += currentValue;
-                value2 = Convert.ToDouble(stringValue2);
+                try
+                {
+                    value2 = Convert.ToDouble(stringValue2);
+                }
+                catch(FormatException){
+                    return "ERROR"; //This causes bugs
+                }
                 return stringValue2;
             }
         }
@@ -63,12 +89,12 @@ namespace Calculator.Models
         {
             //Set operator
             currentOp = op;
-            
+
             //If either of the values are not empty, ie it's not first operator
             if (!(stringValue1 == string.Empty || stringValue2 == string.Empty))
             {
                 //do the operation
-                return performOp();
+                return performOp(true);
             }
 
             //Set value flag
@@ -79,17 +105,20 @@ namespace Calculator.Models
 
         }
 
-        public string performOp()
+        public string performOp(bool flop)
         {
             //Put result of operation into value1
             value1 = currentOp.perform(value1, value2);
             stringValue1 = value1.ToString();
 
-            //Set value flag
-            valFlag = false;
+            if (flop)
+                //Set value flag
+                valFlag = false;
+            else
+                valFlag = true;
 
             //Empty other value for further operations
-            stringValue2 = "0";
+            stringValue2 = "";
             value2 = 0;
 
             //Return result to display

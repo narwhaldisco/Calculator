@@ -55,7 +55,7 @@ namespace Calculator
 
         private void buttonEquals_Click(object sender, EventArgs e)
         {
-            this.calcWindow.Text = currentMode.performOperation();
+            this.calcWindow.Text = currentMode.performOperation(false);
         }
 
         private void buttonMinus_Click(object sender, EventArgs e)
