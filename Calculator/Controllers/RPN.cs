@@ -43,6 +43,10 @@ namespace Calculator.Controllers
 
         public override string inputOperator(Operator op)
         {
+
+            return Program.MainModel.pullValue(op);
+
+            /*
             switch (state)
             {
                 case States.HAVE_NOTHING:
@@ -54,7 +58,7 @@ namespace Calculator.Controllers
 
                 default:
                     return "ERROR";
-            }
+            }*/
         }
 
         public override string performOperation(bool flop)

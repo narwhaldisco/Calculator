@@ -135,6 +135,8 @@ namespace Calculator.Models
 
             valFlag = true;
 
+            rpnStack = new Stack<double>();
+
             return value1.ToString();
         }
 
@@ -144,15 +146,34 @@ namespace Calculator.Models
         internal string pushValue()
         {
 
-
             rpnStack.Push(value1);
 
             value1 = 0;
             stringValue1 = "0";
 
+            return "PUSHED";
+            
+        }
+
+        internal string pullValue(Operator op)
+        {
+            try
+            {
+                value1 = rpnStack.Pop();
+                value2 = rpnStack.Pop();
+            }
+            catch (InvalidOperationException)
+            {
+                clear();
+                return "ERROR";
+            }
+
+            value1 = op.perform(value1, value2);
+
+            rpnStack.Push(value1);
+
             return value1.ToString();
 
-            
         }
     }
 }
