@@ -8,6 +8,10 @@ namespace Calculator.Controllers
 {
     class RPN : Mode
     {
+
+        // No explicit states here, assignment did not require it and they're also very simple
+        // One could derive states, they would be similar to the INFIX, possibly with the addition of condition of the stack
+
         public RPN()
         {
             //Set initial state
@@ -25,40 +29,13 @@ namespace Calculator.Controllers
 
         override public string inputDigit(string value)
         {
-            switch (state)
-            {
-                case States.HAVE_NOTHING:
-                    this.state = States.HAVE_OPERAND;
-                    return Program.MainModel.setCurrentValue(value);
-
-                case States.HAVE_OPERATOR:
-                case States.HAVE_OPERAND:
-                    this.state = States.HAVE_OPERAND;
-                    return Program.MainModel.setCurrentValue(value);
-
-                default:
-                    return "ERROR"; //Should be impossible to get here
-            }
+           return Program.MainModel.setCurrentValue(value);
         }
 
         public override string inputOperator(Operator op)
         {
-
             return Program.MainModel.pullValue(op);
 
-            /*
-            switch (state)
-            {
-                case States.HAVE_NOTHING:
-                    return "ERROR";
-
-                case States.HAVE_OPERAND:
-                    this.state = States.HAVE_OPERATOR;
-                    return Program.MainModel.setCurrentOp(op);
-
-                default:
-                    return "ERROR";
-            }*/
         }
 
         public override string performOperation(bool flop)

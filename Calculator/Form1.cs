@@ -16,17 +16,21 @@ namespace Calculator
 {
     public partial class Form1 : Form
     {
+        /* Not much going on here, most of the functionality and interesting things happen in the controller and model. 
+         * See INFIX.cs and MainModel.cs for specific examples
+        */ 
 
 
         //Members-----------------------------------------------------------------------------------------------------------------------------
         
 
         [DllImport("gdi32.dll")]
-        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts); //Ignore this.
+        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts); //Ignore this. It's for the font
 
         FontFamily ff;
         Font font;
 
+        //Sets current mode, INFIX or RPN in this case
         Mode currentMode;
 
         //Functions-----------------------------------------------------------------------------------------------------------------------------
@@ -40,8 +44,13 @@ namespace Calculator
 
         private void inputDigit(object sender, EventArgs e)
         {
+            //This is a pretty silly hack to determine what symbol each button corresponds to
             this.calcWindow.Text = currentMode.inputDigit(sender.ToString()[sender.ToString().Length - 1].ToString());
         }
+
+        /* All the operations could probably be consolidated into a single handler and some decoding logic/hack could proably be produced (like my inputDigit hack)
+         * But, I was lazy.
+        */ 
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
@@ -79,6 +88,7 @@ namespace Calculator
 
         }
 
+        //Some logic for switching modes
         private void buttonMode_Click(object sender, EventArgs e)
         {
             this.calcWindow.Text = currentMode.clear();
