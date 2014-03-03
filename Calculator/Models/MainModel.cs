@@ -108,7 +108,14 @@ namespace Calculator.Models
         public string performOp(bool flop)
         {
             //Put result of operation into value1
-            value1 = currentOp.perform(value1, value2);
+            try
+            {
+                value1 = currentOp.perform(value1, value2);
+            }
+            catch (NullReferenceException)
+            {
+                //Do Nothing
+            }
             stringValue1 = value1.ToString();
 
             if (flop)
