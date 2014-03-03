@@ -25,7 +25,7 @@ namespace Calculator.Controllers
         //Input digits
         abstract public string inputDigit(string value);
 
-        //Four Functions
+        //Functions reflect the states
         abstract public string inputOperator(Operator op);
 
         abstract public string performOperation(bool flop);
@@ -38,7 +38,7 @@ namespace Calculator.Controllers
         }
 
 
-
+        //Only for RPN
         virtual public string pushValue() { return string.Empty; }
     }
 }

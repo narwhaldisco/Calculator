@@ -20,6 +20,8 @@ namespace Calculator.Controllers
 
         override public string inputDigit(string value)
         {
+
+            //Check state, in this function, it doesn't really matter what state it's already in, it just sets the state for further operations
             switch (state)
             {
                 case States.HAVE_NOTHING:
@@ -37,6 +39,8 @@ namespace Calculator.Controllers
 
         public override string inputOperator(Operator op)
         {
+
+            //Check state, state is pretty important here
             switch (state)
             {
                 case States.HAVE_NOTHING:
@@ -53,6 +57,7 @@ namespace Calculator.Controllers
 
         public override string performOperation(bool flop)
         {
+            //Just perform operation and set state
             this.state = States.HAVE_OPERAND;
             return Program.MainModel.performOp(flop);
         }

@@ -16,8 +16,10 @@ namespace Calculator.Models
         public string stringValue1;
         public string stringValue2;
 
+        //Flag to tell which value should be filled
         public bool valFlag;
 
+        //Current operator, or next to be computed operator
         public Operator currentOp;
 
         //Members for RPN
@@ -25,6 +27,7 @@ namespace Calculator.Models
 
         public MainModel()
         {
+            //Initialize everything to empty
             stringValue1 = string.Empty;
             stringValue2 = string.Empty;
 
@@ -37,6 +40,7 @@ namespace Calculator.Models
 
         public string setCurrentValue(string currentValue)
         {
+            //Which value to fill
             if (valFlag)
             {
                 //Check if 0 for asthetic reasons, ie no leading zeros
@@ -49,18 +53,21 @@ namespace Calculator.Models
                 }
                 
 
+                //Append new value on end of number, just like a calculator
                 stringValue1 += currentValue;
 
+                //Convert it to a double
                 try
                 {
                     value1 = Convert.ToDouble(stringValue1);
                 }
                 catch (FormatException)
                 {
+                    //This should catch any weird stuff getting entered, try 1.1.1 or the like
                     return "ERROR";
                 }
  
-      
+                //Return value to display
                 return stringValue1;
             }
             else
@@ -73,14 +80,21 @@ namespace Calculator.Models
                         stringValue2 = "0";
                 }
 
+                //Append new value on end of number, just like a calculator
                 stringValue2 += currentValue;
+
+                //Convert it to a double
                 try
                 {
                     value2 = Convert.ToDouble(stringValue2);
                 }
-                catch(FormatException){
-                    return "ERROR"; //This causes bugs
+                catch(FormatException)
+                {
+                    //This should catch any weird stuff getting entered, try 1.1.1 or the like
+                    return "ERROR";
                 }
+
+                //Return value to display
                 return stringValue2;
             }
         }
@@ -114,8 +128,10 @@ namespace Calculator.Models
             }
             catch (NullReferenceException)
             {
-                //Do Nothing
+                //Do Nothing, if you somehow get value1 as null
             }
+
+
             stringValue1 = value1.ToString();
 
             if (flop)
@@ -134,6 +150,7 @@ namespace Calculator.Models
 
         public string clear()
         {
+            //Clear everything
             stringValue1 = string.Empty;
             stringValue2 = string.Empty;
 
@@ -153,6 +170,7 @@ namespace Calculator.Models
         internal string pushValue()
         {
 
+            //Push value to stack
             rpnStack.Push(value1);
 
             value1 = 0;
@@ -164,6 +182,7 @@ namespace Calculator.Models
 
         internal string pullValue(Operator op)
         {
+            //Pop 2 values and perform operation
             try
             {
                 value1 = rpnStack.Pop();
@@ -171,14 +190,18 @@ namespace Calculator.Models
             }
             catch (InvalidOperationException)
             {
+                //If stack has less than 2 values, return error and clear
                 clear();
                 return "ERROR";
             }
 
+            //Do operation
             value1 = op.perform(value1, value2);
 
+            //Push back onto stack
             rpnStack.Push(value1);
 
+            //display computed value, note: in this implementation it will already be pushed before displaying
             return value1.ToString();
 
         }
